@@ -1,6 +1,5 @@
-package traf1.ganotrakrish.recyclerview;
+package traf1.ganotrakrish.fragments;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,7 +9,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import traf1.ganotrakrish.fragments.R;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private List<String> values;

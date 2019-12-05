@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,37 +14,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FooFragment extends Fragment {
-    // The onCreateView method is called when Fragment should create its View object hierarchy,
-    // either dynamically or via XML layout inflation.
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    public RecyclerView recyclerView;
+    public RecyclerView.Adapter mAdapter;
+    public RecyclerView.LayoutManager layoutManager;
+    public  List<String> input;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        // Defines the xml file for the fragment
         View view =  inflater.inflate(R.layout.fragment_foo, parent, false);
 
         recyclerView = view.findViewById(R.id.my_recycler_view);
 
-
-
-
-        // use this setting to
-        // improve performance if you know that changes
-        // in content do not change the layout size
-        // of the RecyclerView
         recyclerView.setHasFixedSize(true);
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        List<String> input = new ArrayList<>();
+        input = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             input.add("Test" + i);
         }// define an adapter
-        mAdapter = new traf1.ganotrakrish.recyclerview.MyAdapter(input);
+        mAdapter = new traf1.ganotrakrish.fragments.MyAdapter(input);
         recyclerView.setAdapter(mAdapter);
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder
+                            target) {
+                        return false;
+                    }
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        input.remove(viewHolder.getAdapterPosition());
+                        mAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    }
+                };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         return view;
     }
